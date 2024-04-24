@@ -1,5 +1,5 @@
 from igraph import Graph
-from header import create_puzzle
+from create_puzzle import *
 from bfs_header import Queue
 
 def check_correct(g, q, vid, height):
