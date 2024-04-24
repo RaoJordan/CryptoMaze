@@ -1,10 +1,12 @@
-import igraph
+from igraph import *
+from header import main_func
+from header import payment
 import sys
 import time
 import random
 
 def main():
-    g = igraph.Graph()
+    g = Graph()
     height = []
     t = time.time()
     total_bytes = 0
@@ -15,7 +17,7 @@ def main():
     # Open and read graph from file
     try:
         with open(sys.argv[1], "r") as fp:
-            g = igraph.Graph.Read_Edgelist(fp)
+            g = Graph.Read_Edgelist(fp)
     except FileNotFoundError:
         print("File does not exist")
         sys.exit(1)
