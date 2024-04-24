@@ -32,10 +32,9 @@ if __name__ == "__main__":
     fp2 = open(sys.argv[6], "w")
     fp3 = open(sys.argv[7], "w")
 
-    igraph.set_attribute_table(igraph.AttributeTable())
     random_seed = int(time.time())
     random.seed(random_seed)
-    g = igraph.Graph.Barabasi(num_nodes, 1, 4, outpref=True, directed=True, start_from=None, start_with=1)
+    g = igraph.Graph.Barabasi(num_nodes, 4, outpref=True, directed=True, start_from=None)
     val = g.ecount()
     fp2.write("# Graph Property Class\ntreeembedding.credit.CreditLinks\n# Key\nCREDIT_LINKS\n")
 
@@ -53,10 +52,9 @@ if __name__ == "__main__":
             cap = random.randint(1000, 1006)
         fp2.write(f"{to_node} {from_node} -0.0 0.0 {cap}.0\n")
         g.add_edge(to_node, from_node)
+        # Set 'flow' and 'weight' attributes for the edge
         g.es[g.get_eid(to_node, from_node, directed=True)]["weight"] = cap
-        g.es[g.get_eid(from_node, to_node, directed=True)]["weight"] = cap
         g.es[g.get_eid(to_node, from_node, directed=True)]["flow"] = cap
-        g.es[g.get_eid(from_node, to_node, directed=True)]["flow"] = 0
 
     fp2.close()
     g.write_graphml(fp.name)
@@ -70,6 +68,12 @@ if __name__ == "__main__":
     read = open(sys.argv[3], "r")
     g = igraph.Graph.Read_Edgelist(read, directed=True)
     read.close()
+
+    for eid in range(g.ecount()):
+        from_node, to_node = g.es[eid].tuple
+        eid1 = g.get_eid(from_node, to_node, directed=True)
+        g.es[eid1]['flow'] = 0  # Set 'flow' attribute to 0
+        g.es[eid1]['weight'] = 0  # Set 'weight' attribute to 0
 
     for eid in range(g.ecount()):
         from_node, to_node = g.es[eid].tuple
